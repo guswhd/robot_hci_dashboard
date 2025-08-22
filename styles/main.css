@@ -1,0 +1,121 @@
+/* Google Fonts & 기본 설정 */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+:root {
+    --bg-dark: #1a1d24;
+    --bg-light: #2c303a;
+    --primary-blue: #00aaff;
+    --text-light: #e0e0e0;
+    --text-dark: #a0a0a0;
+    --border-color: rgba(0, 170, 255, 0.2);
+    --green-ok: #00ffaa;
+    --red-alert: #ff4466;
+    --orange-warn: #ffcc00;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    height: 100vh;
+    overflow: hidden;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Light Theme */
+body.light-theme {
+    --bg-dark: #f0f2f5;
+    --bg-light: #ffffff;
+    --primary-blue: #007bff;
+    --text-light: #212529;
+    --text-dark: #6c757d;
+    --border-color: rgba(0, 123, 255, 0.2);
+}
+
+.container { display: grid; grid-template-columns: 240px 1fr; height: 100%; }
+
+/* --- 사이드바 --- */
+.sidebar { background-color: var(--bg-light); padding: 20px; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; transition: background-color 0.3s; }
+.logo { display: flex; align-items: center; gap: 10px; color: var(--primary-blue); margin-bottom: 40px; }
+.logo h1 { font-size: 1rem; font-weight: 700; }
+.navigation .nav-item { display: flex; align-items: center; gap: 15px; padding: 15px 10px; text-decoration: none; color: var(--text-dark); border-radius: 8px; transition: all 0.3s ease; cursor: pointer; }
+.navigation .nav-item:hover { background-color: rgba(0, 170, 255, 0.1); color: var(--text-light); }
+.navigation .nav-item.active { background-color: var(--primary-blue); color: #fff; box-shadow: 0 0 15px rgba(0, 170, 255, 0.5); }
+.system-status { margin-top: auto; }
+.system-status h2 { font-size: 0.8rem; color: var(--text-dark); margin-bottom: 10px; }
+.status-indicator { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
+.status-indicator .dot { width: 10px; height: 10px; border-radius: 50%; background-color: var(--orange-warn); }
+.status-indicator .dot.active { background-color: var(--green-ok); box-shadow: 0 0 8px var(--green-ok); }
+
+/* --- 메인 대시보드 --- */
+.dashboard { padding: 20px 30px; overflow-y: auto; }
+.dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.dashboard-header h2 { font-weight: 400; }
+.widgets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+.card { background-color: var(--bg-light); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; transition: background-color 0.3s; }
+.card h3 { font-weight: 400; color: var(--text-dark); margin-bottom: 15px; }
+.card.card-full-row { grid-column: 1 / -1; }
+
+/* 게이지 스타일 */
+.gauge-container { position: relative; width: 100%; padding-top: 100%; }
+.gauge { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-135deg); }
+.gauge-base { fill: none; stroke: rgba(0, 0, 0, 0.2); stroke-width: 10; stroke-dasharray: 212; stroke-dashoffset: 0; }
+.gauge-dial { fill: none; stroke: var(--primary-blue); stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 0.3s ease; filter: drop-shadow(0 0 5px var(--primary-blue)); stroke-dasharray: 212; }
+.gauge-value { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.5rem; font-weight: 700; }
+.gauge-value span { font-size: 1rem; color: var(--text-dark); margin-left: 5px; }
+
+/* 실시간 데이터 카드 */
+.live-data { display: flex; align-items: center; justify-content: center; gap: 15px; height: 100%; min-height: 120px;}
+.live-data .material-icons { font-size: 3rem; color: var(--primary-blue); }
+.live-data p { font-size: 2rem; font-weight: 700; }
+
+/* 힘 센서 막대그래프 */
+.force-grid { display: flex; flex-direction: column; gap: 20px; }
+.force-item { width: 100%; }
+.force-label { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-dark); }
+.force-bar-container { width: 100%; height: 12px; background-color: rgba(0,0,0,0.2); border-radius: 6px; overflow: hidden; }
+.force-bar { height: 100%; background-color: var(--orange-warn); border-radius: 6px; transition: width 0.3s ease; box-shadow: 0 0 10px var(--orange-warn); }
+
+/* --- 수동 제어 패널 --- */
+.controls-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+.control-item { display: flex; flex-direction: column; }
+.control-item label { font-size: 0.9rem; color: var(--text-dark); margin-bottom: 10px; }
+.control-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; background: #1a1d24; outline: none; border-radius: 4px; }
+.control-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; background: var(--primary-blue); cursor: pointer; border-radius: 50%; box-shadow: 0 0 10px var(--primary-blue); }
+.control-slider::-moz-range-thumb { width: 20px; height: 20px; background: var(--primary-blue); cursor: pointer; border-radius: 50%; box-shadow: 0 0 10px var(--primary-blue); }
+
+/* --- 페이지 전환 로직 --- */
+.page-content { display: none; }
+.page-content.active { display: block; }
+
+/* --- 설정 페이지 --- */
+.settings-item { margin-bottom: 20px; }
+.settings-item label { display: block; margin-bottom: 10px; color: var(--text-dark); }
+.theme-switcher { display: flex; justify-content: space-between; align-items: center; }
+.switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #555; transition: .4s; border-radius: 34px; }
+.switch-slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .switch-slider { background-color: var(--primary-blue); }
+input:checked + .switch-slider:before { transform: translateX(26px); }
+
+/* --- 진단 페이지 --- */
+.diagnostics-list { list-style: none; padding: 0; }
+.diagnostics-list li { display: flex; align-items: center; justify-content: space-between; padding: 15px; border-bottom: 1px solid var(--border-color); }
+.diagnostics-list li:last-child { border-bottom: none; }
+.diag-status { font-weight: bold; }
+.diag-status.ok { color: var(--green-ok); }
+.diag-status.fail { color: var(--red-alert); }
+.diag-status.checking { color: var(--orange-warn); }
+
+/* --- 이벤트 로그 페이지 --- */
+.log-container { max-height: 400px; overflow-y: auto; }
+.log-table { width: 100%; border-collapse: collapse; }
+.log-table th, .log-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+.log-table th { background-color: rgba(0,0,0,0.2); }
+.log-table tbody tr:hover { background-color: rgba(0, 170, 255, 0.05); }
+.log-type-info { color: var(--primary-blue); }
+.log-type-warn { color: var(--orange-warn); }
+.log-type-error { color: var(--red-alert); }

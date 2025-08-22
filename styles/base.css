@@ -41,7 +41,8 @@ body {
 /* 대시보드 레이아웃 */
 .dashboard {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  /* 화면 크기에 맞춰 최소 350px 너비의 카드를 자동으로 정렬 */
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 20px;
   padding: 20px;
 }

@@ -1,46 +1,111 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Robot HCI Dashboard</title>
-  <link rel="stylesheet" href="styles/base.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Center - Robot Arm HCI</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
-  <!-- 헤더 -->
-  <header class="navbar">
-    <h1>Robot HCI Dashboard</h1>
-    <nav>
-      <ul>
-        <li><a href="pages/controller.html">Controller</a></li>
-        <li><a href="pages/visualization.html">Visualization</a></li>
-        <li><a href="pages/status.html">Status</a></li>
-        <li><a href="pages/log.html">Log</a></li>
-      </ul>
-    </nav>
-  </header>
+    <div class="container">
+        <!-- 왼쪽 사이드바 -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="material-icons">precision_manufacturing</span>
+                <h1>ROBOT ARM OS</h1>
+            </div>
+            <nav class="navigation">
+                <a href="#" class="nav-item active" data-target="manual-control-page"><span class="material-icons">gamepad</span> Manual Control</a>
+                <a href="#" class="nav-item" data-target="settings-page"><span class="material-icons">settings</span> Settings</a>
+                <a href="#" class="nav-item" data-target="diagnostics-page"><span class="material-icons">build_circle</span> Diagnostics</a>
+                <a href="#" class="nav-item" data-target="event-log-page"><span class="material-icons">history</span> Event Log</a>
+            </nav>
+            <div class="system-status">
+                <h2>SYSTEM STATUS</h2>
+                <div class="status-indicator">
+                    <div id="system-status-dot" class="dot active"></div>
+                    <span id="system-status-text">Manual Mode</span>
+                </div>
+            </div>
+        </aside>
 
-  <!-- 메인 대시보드 -->
-  <main class="dashboard">
-    <section class="card">
-      <h2>Speed Control</h2>
-      <div class="widget">게이지 or 슬라이더</div>
-    </section>
+        <!-- 오른쪽 메인 대시보드 -->
+        <main class="dashboard">
+            <!-- 페이지 1: 수동 제어 -->
+            <div id="manual-control-page" class="page-content active">
+                <header class="dashboard-header">
+                    <h2>6-Axis Force & Torque Monitoring</h2>
+                </header>
+                <div class="widgets-grid">
+                    <!-- 토크 게이지 -->
+                    <div class="card">
+                        <h3>Torque X-Axis (Tx)</h3>
+                        <div class="gauge-container">
+                            <svg class="gauge" viewBox="0 0 100 100"><circle class="gauge-base" cx="50" cy="50" r="45"></circle><circle id="torque-x-dial" class="gauge-dial" cx="50" cy="50" r="45"></circle></svg>
+                            <div id="torque-x-value" class="gauge-value">0<span>Nm</span></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>Torque Y-Axis (Ty)</h3>
+                        <div class="gauge-container">
+                            <svg class="gauge" viewBox="0 0 100 100"><circle class="gauge-base" cx="50" cy="50" r="45"></circle><circle id="torque-y-dial" class="gauge-dial" cx="50" cy="50" r="45"></circle></svg>
+                            <div id="torque-y-value" class="gauge-value">0<span>Nm</span></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>Torque Z-Axis (Tz)</h3>
+                        <div class="live-data"><span class="material-icons">rotate_right</span><p id="torque-z-value">0 Nm</p></div>
+                    </div>
+                    <!-- 힘 센서 데이터 -->
+                    <div class="card card-full-row">
+                        <h3>Force Sensor Readouts</h3>
+                        <div class="force-grid">
+                            <div class="force-item"><div class="force-label"><span>Force X (Fx)</span><span id="force-x-value">0 N</span></div><div class="force-bar-container"><div id="force-x-bar" class="force-bar"></div></div></div>
+                            <div class="force-item"><div class="force-label"><span>Force Y (Fy)</span><span id="force-y-value">0 N</span></div><div class="force-bar-container"><div id="force-y-bar" class="force-bar"></div></div></div>
+                            <div class="force-item"><div class="force-label"><span>Force Z (Fz)</span><span id="force-z-value">0 N</span></div><div class="force-bar-container"><div id="force-z-bar" class="force-bar"></div></div></div>
+                        </div>
+                    </div>
+                    <!-- 수동 제어 패널 -->
+                    <div class="card card-full-row">
+                        <h3>Manual Controls</h3>
+                        <div class="controls-grid">
+                            <div class="control-item"><label for="tx-slider">Torque X</label><input type="range" id="tx-slider" class="control-slider" min="-10" max="10" value="0" step="0.1"></div>
+                            <div class="control-item"><label for="ty-slider">Torque Y</label><input type="range" id="ty-slider" class="control-slider" min="-10" max="10" value="0" step="0.1"></div>
+                            <div class="control-item"><label for="tz-slider">Torque Z</label><input type="range" id="tz-slider" class="control-slider" min="-10" max="10" value="0" step="0.1"></div>
+                            <div class="control-item"><label for="fx-slider">Force X</label><input type="range" id="fx-slider" class="control-slider" min="-20" max="20" value="0" step="0.1"></div>
+                            <div class="control-item"><label for="fy-slider">Force Y</label><input type="range" id="fy-slider" class="control-slider" min="-20" max="20" value="0" step="0.1"></div>
+                            <div class="control-item"><label for="fz-slider">Force Z</label><input type="range" id="fz-slider" class="control-slider" min="-20" max="80" value="63" step="0.1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <section class="card">
-      <h2>Rotation Angle</h2>
-      <div class="widget">게이지 or 슬라이더</div>
-    </section>
+            <!-- 페이지 2: 설정 -->
+            <div id="settings-page" class="page-content">
+                <header class="dashboard-header"><h2>Settings</h2></header>
+                <div class="widgets-grid">
+                    <div class="card card-full-row"><h3>System Configuration</h3><p>시스템 설정 관련 UI가 이곳에 표시됩니다.</p></div>
+                </div>
+            </div>
 
-    <section class="card">
-      <h2>Digital I/O</h2>
-      <div class="widget">토글 버튼</div>
-    </section>
+            <!-- 페이지 3: 진단 -->
+            <div id="diagnostics-page" class="page-content">
+                <header class="dashboard-header"><h2>Diagnostics</h2></header>
+                <div class="widgets-grid">
+                    <div class="card card-full-row"><h3>System Health Check</h3><p>진단 정보 관련 UI가 이곳에 표시됩니다.</p></div>
+                </div>
+            </div>
 
-    <section class="card">
-      <h2>Analog I/O</h2>
-      <div class="widget">입력 필드 / 그래프</div>
-    </section>
-  </main>
+            <!-- 페이지 4: 이벤트 로그 -->
+            <div id="event-log-page" class="page-content">
+                <header class="dashboard-header"><h2>Event Log</h2></header>
+                <div class="widgets-grid">
+                    <div class="card card-full-row"><h3>Activity History</h3><p>이벤트 로그 관련 UI가 이곳에 표시됩니다.</p></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/controller.js"></script>
 </body>
 </html>

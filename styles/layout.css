@@ -1,0 +1,146 @@
+/* 슬라이더 스타일 */
+.slider {
+  width: 100%;
+  cursor: pointer;
+}
+
+/* --- Digital I/O 위젯 개선 --- */
+
+/* 개별 I/O 아이템 레이아웃 */
+.io-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px; /* 스위치와 점 사이 간격 */
+}
+
+/* 상태 표시등 (Status Dot) */
+.status-dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: #555; /* 기본(Off) 색상 */
+  transition: background-color 0.4s;
+}
+
+/* 체크박스가 선택되었을 때 상태 표시등 색상 변경 */
+.io-item input:checked ~ .status-dot {
+  background-color: #15c571; /* 활성(On) 색상 */
+  box-shadow: 0 0 8px #15c571;
+}
+
+/* Digital I/O 그리드 재정의 */
+.io-grid {
+    display: grid;
+    /* 내부 아이템을 2개의 컬럼으로 나눔 */
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    align-items: center;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px; /* 스위치 너비 조정 */
+  height: 34px;
+  margin: 0 auto;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #555;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .switch-slider {
+  background-color: #0f9d58; /* 활성 색상 (초록) */
+}
+
+/* 체크 시 슬라이더 이동 거리 조정 */
+input:checked + .switch-slider:before {
+  transform: translateX(26px);
+}
+
+.switch span {
+    display: block;
+    text-align: center;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+/* 아날로그 I/O 입력 필드 */
+.analog-input-field {
+    width: 80%;
+    padding: 8px;
+    background: #111;
+    border: 1px solid #444;
+    color: #f0f0f0;
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* 추가 기능 버튼 */
+.full-width {
+    grid-column: 1 / -1; /* 카드를 전체 너비로 확장 */
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    background: #555;
+    color: #f0f0f0;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background: #777;
+}
+
+.btn-primary {
+    background: #0f9d58;
+}
+
+.btn-primary:hover {
+    background: #15c571;
+}
+
+/* 시뮬레이션 버튼 활성 스타일 */
+.btn.active {
+    background: #c23b22; /* 중지 버튼 색상 (빨강) */
+}
+.btn.active:hover {
+    background: #d64a33;
+}
