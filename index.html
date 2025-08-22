@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robot HCI Dashboard</title>
+  <link rel="stylesheet" href="styles/base.css">
+</head>
+<body>
+  <!-- 헤더 -->
+  <header class="navbar">
+    <h1>Robot HCI Dashboard</h1>
+    <nav>
+      <ul>
+        <li><a href="pages/controller.html">Controller</a></li>
+        <li><a href="pages/visualization.html">Visualization</a></li>
+        <li><a href="pages/status.html">Status</a></li>
+        <li><a href="pages/log.html">Log</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- 메인 대시보드 -->
+  <main class="dashboard">
+    <section class="card">
+      <h2>Speed Control</h2>
+      <div class="widget">게이지 or 슬라이더</div>
+    </section>
+
+    <section class="card">
+      <h2>Rotation Angle</h2>
+      <div class="widget">게이지 or 슬라이더</div>
+    </section>
+
+    <section class="card">
+      <h2>Digital I/O</h2>
+      <div class="widget">토글 버튼</div>
+    </section>
+
+    <section class="card">
+      <h2>Analog I/O</h2>
+      <div class="widget">입력 필드 / 그래프</div>
+    </section>
+  </main>
+</body>
+</html>
