@@ -6,6 +6,9 @@
     <title>Command Center - Robot Arm HCI</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
+    <!-- Three.js 라이브러리 추가 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
     <div class="container">
@@ -37,46 +40,56 @@
                 <header class="dashboard-header">
                     <h2>6-Axis Force & Torque Monitoring</h2>
                 </header>
-                <div class="widgets-grid">
-                    <!-- 토크 게이지 -->
-                    <div class="card">
-                        <h3>Torque X-Axis (Tx)</h3>
-                        <div class="gauge-container">
-                            <svg class="gauge" viewBox="0 0 100 100"><circle class="gauge-base" cx="50" cy="50" r="45"></circle><circle id="torque-x-dial" class="gauge-dial" cx="50" cy="50" r="45"></circle></svg>
-                            <div id="torque-x-value" class="gauge-value">0<span>Nm</span></div>
+                <div class="widgets-grid two-column-layout">
+                    <!-- 왼쪽 제어 패널 -->
+                    <div class="control-panel">
+                        <!-- 토크 게이지 -->
+                        <div class="card">
+                            <h3>Torque X-Axis (Tx)</h3>
+                            <div class="gauge-container">
+                                <svg class="gauge" viewBox="0 0 100 100"><circle class="gauge-base" cx="50" cy="50" r="45"></circle><circle id="torque-x-dial" class="gauge-dial" cx="50" cy="50" r="45"></circle></svg>
+                                <div id="torque-x-value" class="gauge-value">0<span>Nm</span></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Torque Y-Axis (Ty)</h3>
+                            <div class="gauge-container">
+                                <svg class="gauge" viewBox="0 0 100 100"><circle class="gauge-base" cx="50" cy="50" r="45"></circle><circle id="torque-y-dial" class="gauge-dial" cx="50" cy="50" r="45"></circle></svg>
+                                <div id="torque-y-value" class="gauge-value">0<span>Nm</span></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Torque Z-Axis (Tz)</h3>
+                            <div class="live-data"><span class="material-icons">rotate_right</span><p id="torque-z-value">0 Nm</p></div>
+                        </div>
+                        <!-- 힘 센서 데이터 -->
+                        <div class="card card-full-row">
+                            <h3>Force Sensor Readouts</h3>
+                            <div class="force-grid">
+                                <div class="force-item"><div class="force-label"><span>Force X (Fx)</span><span id="force-x-value">0 N</span></div><div class="force-bar-container"><div id="force-x-bar" class="force-bar"></div></div></div>
+                                <div class="force-item"><div class="force-label"><span>Force Y (Fy)</span><span id="force-y-value">0 N</span></div><div class="force-bar-container"><div id="force-y-bar" class="force-bar"></div></div></div>
+                                <div class="force-item"><div class="force-label"><span>Force Z (Fz)</span><span id="force-z-value">0 N</span></div><div class="force-bar-container"><div id="force-z-bar" class="force-bar"></div></div></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="card">
-                        <h3>Torque Y-Axis (Ty)</h3>
-                        <div class="gauge-container">
-                            <svg class="gauge" viewBox="0 0 100 100"><circle class="gauge-base" cx="50" cy="50" r="45"></circle><circle id="torque-y-dial" class="gauge-dial" cx="50" cy="50" r="45"></circle></svg>
-                            <div id="torque-y-value" class="gauge-value">0<span>Nm</span></div>
+                    <!-- 오른쪽 시각화 패널 -->
+                    <div class="visualization-panel">
+                        <div class="card full-height">
+                            <h3>Robot Arm Visualization</h3>
+                            <div id="robot-canvas-container"></div>
                         </div>
                     </div>
-                    <div class="card">
-                        <h3>Torque Z-Axis (Tz)</h3>
-                        <div class="live-data"><span class="material-icons">rotate_right</span><p id="torque-z-value">0 Nm</p></div>
-                    </div>
-                    <!-- 힘 센서 데이터 -->
-                    <div class="card card-full-row">
-                        <h3>Force Sensor Readouts</h3>
-                        <div class="force-grid">
-                            <div class="force-item"><div class="force-label"><span>Force X (Fx)</span><span id="force-x-value">0 N</span></div><div class="force-bar-container"><div id="force-x-bar" class="force-bar"></div></div></div>
-                            <div class="force-item"><div class="force-label"><span>Force Y (Fy)</span><span id="force-y-value">0 N</span></div><div class="force-bar-container"><div id="force-y-bar" class="force-bar"></div></div></div>
-                            <div class="force-item"><div class="force-label"><span>Force Z (Fz)</span><span id="force-z-value">0 N</span></div><div class="force-bar-container"><div id="force-z-bar" class="force-bar"></div></div></div>
-                        </div>
-                    </div>
-                    <!-- 수동 제어 패널 -->
-                    <div class="card card-full-row">
-                        <h3>Manual Controls</h3>
-                        <div class="controls-grid">
-                            <div class="control-item"><label for="tx-slider">Torque X</label><input type="range" id="tx-slider" class="control-slider" min="-10" max="10" value="0" step="0.1"></div>
-                            <div class="control-item"><label for="ty-slider">Torque Y</label><input type="range" id="ty-slider" class="control-slider" min="-10" max="10" value="0" step="0.1"></div>
-                            <div class="control-item"><label for="tz-slider">Torque Z</label><input type="range" id="tz-slider" class="control-slider" min="-10" max="10" value="0" step="0.1"></div>
-                            <div class="control-item"><label for="fx-slider">Force X</label><input type="range" id="fx-slider" class="control-slider" min="-20" max="20" value="0" step="0.1"></div>
-                            <div class="control-item"><label for="fy-slider">Force Y</label><input type="range" id="fy-slider" class="control-slider" min="-20" max="20" value="0" step="0.1"></div>
-                            <div class="control-item"><label for="fz-slider">Force Z</label><input type="range" id="fz-slider" class="control-slider" min="-20" max="80" value="63" step="0.1"></div>
-                        </div>
+                </div>
+                 <!-- 수동 제어 패널 -->
+                 <div class="card card-full-row">
+                    <h3>Manual Controls</h3>
+                    <div class="controls-grid">
+                        <div class="control-item"><label for="tx-slider">Torque X (Arm Angle)</label><input type="range" id="tx-slider" class="control-slider" min="-90" max="90" value="0" step="1"></div>
+                        <div class="control-item"><label for="ty-slider">Torque Y (Forearm Angle)</label><input type="range" id="ty-slider" class="control-slider" min="-90" max="90" value="0" step="1"></div>
+                        <div class="control-item"><label for="tz-slider">Torque Z (Base Rotation)</label><input type="range" id="tz-slider" class="control-slider" min="-180" max="180" value="0" step="1"></div>
+                        <div class="control-item"><label for="fx-slider">Force X</label><input type="range" id="fx-slider" class="control-slider" min="-20" max="20" value="0" step="0.1"></div>
+                        <div class="control-item"><label for="fy-slider">Force Y</label><input type="range" id="fy-slider" class="control-slider" min="-20" max="20" value="0" step="0.1"></div>
+                        <div class="control-item"><label for="fz-slider">Force Z</label><input type="range" id="fz-slider" class="control-slider" min="-20" max="80" value="63" step="0.1"></div>
                     </div>
                 </div>
             </div>
@@ -85,15 +98,46 @@
             <div id="settings-page" class="page-content">
                 <header class="dashboard-header"><h2>Settings</h2></header>
                 <div class="widgets-grid">
-                    <div class="card card-full-row"><h3>System Configuration</h3><p>시스템 설정 관련 UI가 이곳에 표시됩니다.</p></div>
+                    <div class="card">
+                        <h3>Appearance</h3>
+                        <div class="settings-item">
+                            <div class="theme-switcher">
+                                <label for="theme-switch">Light Mode</label>
+                                <label class="switch">
+                                    <input type="checkbox" id="theme-switch">
+                                    <span class="switch-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>Notifications</h3>
+                        <div class="settings-item">
+                             <div class="theme-switcher">
+                                <label for="notif-switch">Critical Alerts</label>
+                                <label class="switch">
+                                    <input type="checkbox" id="notif-switch" checked>
+                                    <span class="switch-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- 페이지 3: 진단 -->
             <div id="diagnostics-page" class="page-content">
-                <header class="dashboard-header"><h2>Diagnostics</h2></header>
+                <header class="dashboard-header">
+                    <h2>Diagnostics</h2>
+                    <button id="run-diagnostics-btn" class="action-btn">Run Diagnostics</button>
+                </header>
                 <div class="widgets-grid">
-                    <div class="card card-full-row"><h3>System Health Check</h3><p>진단 정보 관련 UI가 이곳에 표시됩니다.</p></div>
+                    <div class="card card-full-row">
+                        <h3>System Health Check</h3>
+                        <ul id="diagnostics-list" class="diagnostics-list">
+                            <!-- 진단 결과가 여기에 동적으로 추가됩니다. -->
+                        </ul>
+                    </div>
                 </div>
             </div>
 
@@ -101,7 +145,23 @@
             <div id="event-log-page" class="page-content">
                 <header class="dashboard-header"><h2>Event Log</h2></header>
                 <div class="widgets-grid">
-                    <div class="card card-full-row"><h3>Activity History</h3><p>이벤트 로그 관련 UI가 이곳에 표시됩니다.</p></div>
+                    <div class="card card-full-row">
+                        <h3>Activity History</h3>
+                        <div class="log-container">
+                            <table class="log-table">
+                                <thead>
+                                    <tr>
+                                        <th>Timestamp</th>
+                                        <th>Type</th>
+                                        <th>Message</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="log-table-body">
+                                    <!-- 로그 데이터가 여기에 동적으로 추가됩니다. -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>

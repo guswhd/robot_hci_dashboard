@@ -58,6 +58,26 @@ body.light-theme {
 .card h3 { font-weight: 400; color: var(--text-dark); margin-bottom: 15px; }
 .card.card-full-row { grid-column: 1 / -1; }
 
+/* --- 수동 제어 페이지 레이아웃 수정 --- */
+.two-column-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2개의 동일한 너비 컬럼 */
+    gap: 20px;
+    align-items: start;
+}
+
+.visualization-panel .card.full-height {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#robot-canvas-container {
+    flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
+    min-height: 400px; /* 최소 높이 지정 */
+    width: 100%;
+}
+
 /* 게이지 스타일 */
 .gauge-container { position: relative; width: 100%; padding-top: 100%; }
 .gauge { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-135deg); }
@@ -109,6 +129,9 @@ input:checked + .switch-slider:before { transform: translateX(26px); }
 .diag-status.ok { color: var(--green-ok); }
 .diag-status.fail { color: var(--red-alert); }
 .diag-status.checking { color: var(--orange-warn); }
+.action-btn { background-color: var(--primary-blue); color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: background-color 0.3s; }
+.action-btn:hover { background-color: #0088cc; }
+.action-btn:disabled { background-color: var(--text-dark); cursor: not-allowed; }
 
 /* --- 이벤트 로그 페이지 --- */
 .log-container { max-height: 400px; overflow-y: auto; }
